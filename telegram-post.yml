@@ -1,0 +1,28 @@
+name: Post FORMA to Telegram
+
+on:
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Publish FORMA post
+        run: |
+          curl -sS -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "chat_id": "@FormaShop_Ua",
+              "text": "🛒 FORMA — магазин техніки\n\n📱 iPhone\n🖥️ Готові ПК\n\nОбирай товар та дивись актуальні ціни 👇",
+              "reply_markup": {
+                "inline_keyboard": [
+                  [
+                    {
+                      "text": "🛒 ВІДКРИТИ FORMA",
+                      "url": "https://t.me/StoreFORMA_bot?startapp"
+                    }
+                  ]
+                ]
+              }
+            }'
