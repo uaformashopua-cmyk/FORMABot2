@@ -234,7 +234,7 @@
     data.forEach(p=>{
       const item=document.createElement('div');
       item.className='product '+(!p.available?'off':'');
-      const img=p.image ? '<img class="thumb" src="'+escapeHtml(p.image)+'" onerror="this.style.visibility=\\'hidden\\'">' : '<div class="thumb"></div>';
+      const img=p.image ? `<img class="thumb" src="${escapeHtml(p.image)}" onerror="this.style.visibility='hidden'">` : '<div class="thumb"></div>';
       item.innerHTML=img+
         '<div><div class="pname">'+escapeHtml(p.name||'Без назви')+
         (!p.available?'<span class="badge">Немає</span>':'')+
