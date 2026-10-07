@@ -1,18 +1,364 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b0b0d">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>FORMA — Адмін-панель</title>
-  <link rel="stylesheet" href="admin.css">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#090909;color:#fff;font-family:Inter,Arial,sans-serif}
+    button,input,select,textarea{font:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+    .logo{font-size:30px;font-weight:900;letter-spacing:3px}
+    .muted{color:#999}
+    .card{background:#121212;border:1px solid #292929;border-radius:18px;padding:20px;margin-bottom:18px}
+    .login{max-width:460px;margin:9vh auto}
+    h1,h2,h3{margin:0 0 14px}
+    label{display:block;font-size:13px;color:#aaa;margin:12px 0 7px}
+    input,select,textarea{width:100%;background:#0b0b0b;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:#777}
+    textarea{min-height:90px;resize:vertical}
+    .btn{border:0;border-radius:10px;padding:12px 16px;cursor:pointer;font-weight:800}
+    .primary{background:#fff;color:#000}
+    .secondary{background:#222;color:#fff;border:1px solid #3a3a3a}
+    .danger{background:#5d1717;color:#fff}
+    .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .msg{padding:12px 14px;border-radius:10px;margin:12px 0;display:none;white-space:pre-wrap}
+    .err{background:#321313;border:1px solid #713030;color:#ffb5b5}
+    .ok{background:#12321c;border:1px solid #2f6f40;color:#b7f0c4}
+    .products{display:grid;gap:12px}
+    .product{background:#0d0d0d;border:1px solid #292929;border-radius:14px;padding:15px;display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center}
+    .thumb{width:76px;height:76px;border-radius:10px;object-fit:cover;background:#181818}
+    .pname{font-weight:900;margin-bottom:4px}
+    .price{font-weight:900;margin-top:6px}
+    .badge{display:inline-block;font-size:11px;padding:4px 7px;border-radius:6px;background:#222;color:#ccc;margin-left:6px}
+    .off{opacity:.5}
+    .hidden{display:none!important}
+    .check{display:flex;align-items:center;gap:9px;margin-top:14px;color:#ccc}
+    .check input{width:auto}
+    .loading{position:fixed;inset:0;background:#090909;display:flex;align-items:center;justify-content:center;z-index:99}
+    .loadingBox{text-align:center;color:#bbb}
+    .spinner{width:28px;height:28px;border:3px solid #333;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:700px){.wrap{padding:14px}.row,.row3{grid-template-columns:1fr}.product{grid-template-columns:56px 1fr}.product .actions{grid-column:1/-1}.thumb{width:56px;height:56px}.top{align-items:flex-start;flex-direction:column}}
+  </style>
 </head>
 <body>
-  <div id="admin-app">
-    <div class="boot">FORMA<br><small>Завантаження адмін-панелі…</small></div>
+<div id="loading" class="loading">
+  <div class="loadingBox"><div class="spinner"></div><div>FORMA — запуск адмін-панелі…</div><div id="loadStatus" class="muted" style="margin-top:8px;font-size:12px"></div></div>
+</div>
+
+<div id="app" class="wrap hidden">
+  <div class="top">
+    <div>
+      <div class="logo">FORMA</div>
+      <div class="muted">Адмін-панель магазину</div>
+    </div>
+    <button id="logoutBtn" class="btn secondary hidden">Вийти</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="admin.js"></script>
+  <div id="globalMsg" class="msg"></div>
+
+  <section id="loginCard" class="card login">
+    <h2>Вхід адміністратора</h2>
+    <div class="muted">Увійдіть через email і пароль Supabase.</div>
+    <label>Email</label>
+    <input id="email" type="email" autocomplete="username" placeholder="Ваш email">
+    <label>Пароль</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="Ваш пароль">
+    <div class="actions"><button id="loginBtn" class="btn primary">Увійти</button></div>
+    <div id="loginMsg" class="msg"></div>
+  </section>
+
+  <section id="adminArea" class="hidden">
+    <div class="card">
+      <h2 id="formTitle">Додати товар</h2>
+      <input id="productId" type="hidden">
+      <div class="row">
+        <div><label>Назва</label><input id="name" placeholder="iPhone 15 / FORMA PRO"></div>
+        <div><label>Категорія</label>
+          <select id="category"><option value="iphone">iPhone</option><option value="pc">PC</option></select>
+        </div>
+      </div>
+      <div class="row">
+        <div><label>Ціна, грн</label><input id="price" type="number" min="0" placeholder="23999"></div>
+        <div><label>Посилання на фото</label><input id="image" placeholder="https://..."></div>
+      </div>
+
+      <div id="iphoneFields">
+        <div class="row3">
+          <div><label>Пам'ять</label><input id="memory" placeholder="128 GB"></div>
+          <div><label>Колір</label><input id="color" placeholder="Black"></div>
+          <div><label>Стан</label><input id="condition" placeholder="Новий / B/В"></div>
+        </div>
+        <div class="row">
+          <div><label>АКБ</label><input id="battery" placeholder="100%"></div>
+          <div><label>Гарантія</label><input id="warranty" placeholder="12 months"></div>
+        </div>
+      </div>
+
+      <div id="pcFields" class="hidden">
+        <div class="row3">
+          <div><label>CPU</label><input id="cpu" placeholder="Ryzen 7"></div>
+          <div><label>GPU</label><input id="gpu" placeholder="RTX 4070"></div>
+          <div><label>RAM</label><input id="ram" placeholder="32 GB"></div>
+        </div>
+        <div class="row">
+          <div><label>Накопичувач</label><input id="storage" placeholder="1 TB"></div>
+          <div><label>Гарантія</label><input id="pcWarranty" placeholder="12 months"></div>
+        </div>
+      </div>
+
+      <label class="check"><input id="available" type="checkbox" checked> Товар доступний</label>
+      <div class="actions">
+        <button id="saveBtn" class="btn primary">Зберегти товар</button>
+        <button id="cancelBtn" class="btn secondary hidden">Скасувати редагування</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="top" style="margin-bottom:12px">
+        <div><h2>Товари</h2><div id="count" class="muted"></div></div>
+        <button id="refreshBtn" class="btn secondary">Оновити</button>
+      </div>
+      <div id="products" class="products"></div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SUPABASE_URL = 'https://qdcnzraotcfdupmnapqo.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_UGo_9Ma67h0WPZdbuBU_cw_FGHgUEHH';
+
+  const loading = document.getElementById('loading');
+  const loadStatus = document.getElementById('loadStatus');
+  const app = document.getElementById('app');
+
+  function bootFail(message){
+    loading.innerHTML =
+      '<div class="loadingBox" style="max-width:560px;padding:20px">' +
+      '<div style="font-size:22px;font-weight:900;margin-bottom:10px">FORMA</div>' +
+      '<div style="color:#ffb5b5;white-space:pre-wrap">' + escapeHtml(message) + '</div>' +
+      '<div style="margin-top:16px;color:#999;font-size:13px">Оновіть сторінку після виправлення. Цей екран більше не зависатиме без пояснення.</div>' +
+      '</div>';
+  }
+  function escapeHtml(s){
+    return String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  }
+
+  if(!window.supabase){
+    bootFail('Не завантажився Supabase JS. Перевірте інтернет і відкрийте admin.html ще раз.');
+    return;
+  }
+
+  let client;
+  try{
+    client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }catch(e){
+    bootFail('Помилка запуску Supabase: ' + (e.message || e));
+    return;
+  }
+
+  const $ = id => document.getElementById(id);
+  function msg(el,text,type='err'){
+    el.textContent = text;
+    el.className = 'msg ' + type;
+    el.style.display = 'block';
+  }
+  function hide(el){el.style.display='none'}
+
+  function setLoading(text){
+    loadStatus.textContent = text || '';
+  }
+
+  function clearForm(){
+    $('productId').value='';
+    $('formTitle').textContent='Додати товар';
+    ['name','price','image','memory','color','condition','battery','warranty','cpu','gpu','ram','storage','pcWarranty'].forEach(id=>$(id).value='');
+    $('category').value='iphone';
+    $('available').checked=true;
+    $('cancelBtn').classList.add('hidden');
+    toggleFields();
+  }
+
+  function fillForm(p){
+    $('productId').value=p.id;
+    $('formTitle').textContent='Редагувати товар';
+    $('name').value=p.name || '';
+    $('category').value=p.category || 'iphone';
+    $('price').value=p.price ?? 0;
+    $('image').value=p.image || '';
+    $('memory').value=p.memory || '';
+    $('color').value=p.color || '';
+    $('condition').value=p.condition || '';
+    $('battery').value=p.battery || '';
+    $('warranty').value=p.warranty || '';
+    $('cpu').value=p.cpu || '';
+    $('gpu').value=p.gpu || '';
+    $('ram').value=p.ram || '';
+    $('storage').value=p.storage || '';
+    $('pcWarranty').value=p.warranty || '';
+    $('available').checked=!!p.available;
+    $('cancelBtn').classList.remove('hidden');
+    toggleFields();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function toggleFields(){
+    const pc=$('category').value==='pc';
+    $('iphoneFields').classList.toggle('hidden',pc);
+    $('pcFields').classList.toggle('hidden',!pc);
+  }
+
+  async function loadProducts(){
+    const box=$('products');
+    box.innerHTML='<div class="muted">Завантаження товарів…</div>';
+    const {data,error}=await client.from('products').select('*').order('id',{ascending:false});
+    if(error){
+      box.innerHTML='';
+      msg($('globalMsg'),'Не вдалося завантажити товари: '+error.message);
+      return;
+    }
+    hide($('globalMsg'));
+    $('count').textContent='Усього: '+(data?.length||0);
+    if(!data?.length){
+      box.innerHTML='<div class="muted">Товарів ще немає. Додайте перший вище.</div>';
+      return;
+    }
+    box.innerHTML='';
+    data.forEach(p=>{
+      const item=document.createElement('div');
+      item.className='product '+(!p.available?'off':'');
+      const img=p.image ? '<img class="thumb" src="'+escapeHtml(p.image)+'" onerror="this.style.visibility=\\'hidden\\'">' : '<div class="thumb"></div>';
+      item.innerHTML=img+
+        '<div><div class="pname">'+escapeHtml(p.name||'Без назви')+
+        (!p.available?'<span class="badge">Немає</span>':'')+
+        '</div><div class="muted">'+escapeHtml(p.category==='pc'?'PC':'iPhone')+'</div>'+
+        '<div class="price">'+Number(p.price||0).toLocaleString('uk-UA')+' грн</div></div>'+
+        '<div class="actions" style="margin:0"><button class="btn secondary edit">Редагувати</button><button class="btn danger del">Видалити</button></div>';
+      item.querySelector('.edit').onclick=()=>fillForm(p);
+      item.querySelector('.del').onclick=()=>deleteProduct(p);
+      box.appendChild(item);
+    });
+  }
+
+  async function deleteProduct(p){
+    if(!confirm('Видалити товар «'+p.name+'»?')) return;
+    const {error}=await client.from('products').delete().eq('id',p.id);
+    if(error){msg($('globalMsg'),'Помилка видалення: '+error.message);return;}
+    msg($('globalMsg'),'Товар видалено.','ok');
+    await loadProducts();
+  }
+
+  async function saveProduct(){
+    hide($('globalMsg'));
+    const id=$('productId').value;
+    const category=$('category').value;
+    const name=$('name').value.trim();
+    const price=Number($('price').value||0);
+    if(!name){msg($('globalMsg'),'Вкажіть назву товару.');return;}
+    if(price<0){msg($('globalMsg'),'Ціна не може бути від’ємною.');return;}
+
+    const payload={
+      name, category, price,
+      image:$('image').value.trim() || null,
+      memory:category==='iphone' ? ($('memory').value.trim()||null) : null,
+      color:category==='iphone' ? ($('color').value.trim()||null) : null,
+      condition:category==='iphone' ? ($('condition').value.trim()||null) : null,
+      battery:category==='iphone' ? ($('battery').value.trim()||null) : null,
+      warranty:category==='iphone' ? ($('warranty').value.trim()||null) : ($('pcWarranty').value.trim()||null),
+      cpu:category==='pc' ? ($('cpu').value.trim()||null) : null,
+      gpu:category==='pc' ? ($('gpu').value.trim()||null) : null,
+      ram:category==='pc' ? ($('ram').value.trim()||null) : null,
+      storage:category==='pc' ? ($('storage').value.trim()||null) : null,
+      available:$('available').checked
+    };
+
+    $('saveBtn').disabled=true;
+    $('saveBtn').textContent='Зберігаю…';
+    let result;
+    if(id) result=await client.from('products').update(payload).eq('id',id);
+    else result=await client.from('products').insert(payload);
+    $('saveBtn').disabled=false;
+    $('saveBtn').textContent='Зберегти товар';
+
+    if(result.error){
+      msg($('globalMsg'),'Не вдалося зберегти товар:\n'+result.error.message);
+      return;
+    }
+    msg($('globalMsg'),id?'Товар оновлено.':'Товар додано.','ok');
+    clearForm();
+    await loadProducts();
+  }
+
+  async function checkAdmin(user){
+    const {data,error}=await client.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();
+    if(error) throw new Error('Не вдалося перевірити admin_users: '+error.message);
+    if(!data) throw new Error('Цей акаунт не має прав адміністратора. Додайте його user_id у public.admin_users.');
+  }
+
+  async function showLoggedIn(user){
+    await checkAdmin(user);
+    $('loginCard').classList.add('hidden');
+    $('adminArea').classList.remove('hidden');
+    $('logoutBtn').classList.remove('hidden');
+    await loadProducts();
+  }
+
+  async function boot(){
+    try{
+      setLoading('Перевіряю сесію…');
+      const {data,error}=await client.auth.getSession();
+      if(error) throw error;
+      loading.classList.add('hidden');
+      app.classList.remove('hidden');
+      if(data.session){
+        try{ await showLoggedIn(data.session.user); }
+        catch(e){ msg($('loginMsg'),e.message||String(e)); }
+      }
+    }catch(e){
+      bootFail('Помилка запуску: '+(e.message||e));
+    }
+  }
+
+  $('loginBtn').onclick=async()=>{
+    hide($('loginMsg'));
+    const email=$('email').value.trim(), password=$('password').value;
+    if(!email||!password){msg($('loginMsg'),'Введіть email і пароль.');return;}
+    $('loginBtn').disabled=true;
+    $('loginBtn').textContent='Вхід…';
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    $('loginBtn').disabled=false;
+    $('loginBtn').textContent='Увійти';
+    if(error){msg($('loginMsg'),error.message);return;}
+    try{await showLoggedIn(data.user);}
+    catch(e){await client.auth.signOut();msg($('loginMsg'),e.message||String(e));}
+  };
+
+  $('logoutBtn').onclick=async()=>{
+    await client.auth.signOut();
+    location.reload();
+  };
+  $('saveBtn').onclick=saveProduct;
+  $('cancelBtn').onclick=clearForm;
+  $('refreshBtn').onclick=loadProducts;
+  $('category').onchange=toggleFields;
+  $('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+
+  // Не дозволяємо екрану «Завантаження…» висіти вічно.
+  setTimeout(()=>{
+    if(!loading.classList.contains('hidden')){
+      bootFail('Сторінка не отримала відповідь вчасно. Найчастіше це означає блокування CDN/Supabase або помилку мережі.');
+    }
+  },12000);
+
+  boot();
+})();
+</script>
 </body>
 </html>
