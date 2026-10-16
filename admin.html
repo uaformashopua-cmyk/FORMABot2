@@ -82,6 +82,12 @@
         <div><label>Категорія</label>
           <select id="category"><option value="iphone">iPhone</option><option value="pc">PC</option></select>
         </div>
+        <div><label>Менеджер для цього оголошення</label>
+          <select id="manager">
+            <option value="Sundayass">Менеджер телефонів — @Sundayass</option>
+            <option value="yurvnnn">Менеджер ПК — @yurvnnn</option>
+          </select>
+        </div>
       </div>
       <div class="row">
         <div><label>Ціна, грн</label><input id="price" type="number" min="0" placeholder="23999"></div>
@@ -181,6 +187,7 @@
     $('formTitle').textContent='Додати товар';
     ['name','price','image','memory','color','condition','battery','warranty','cpu','gpu','ram','storage','pcWarranty'].forEach(id=>$(id).value='');
     $('category').value='iphone';
+    $('manager').value='Sundayass';
     $('available').checked=true;
     $('cancelBtn').classList.add('hidden');
     toggleFields();
@@ -191,6 +198,7 @@
     $('formTitle').textContent='Редагувати товар';
     $('name').value=p.name || '';
     $('category').value=p.category || 'iphone';
+    $('manager').value=p.manager_username || (p.category==='pc' ? 'yurvnnn' : 'Sundayass');
     $('price').value=p.price ?? 0;
     $('image').value=p.image || '';
     $('memory').value=p.memory || '';
@@ -238,7 +246,7 @@
       item.innerHTML=img+
         '<div><div class="pname">'+escapeHtml(p.name||'Без назви')+
         (!p.available?'<span class="badge">Немає</span>':'')+
-        '</div><div class="muted">'+escapeHtml(p.category==='pc'?'PC':'iPhone')+'</div>'+
+        '</div><div class="muted">'+escapeHtml(p.category==='pc'?'PC':'iPhone')+' · менеджер @'+escapeHtml(p.manager_username || (p.category==='pc'?'yurvnnn':'Sundayass'))+'</div>'+
         '<div class="price">'+Number(p.price||0).toLocaleString('uk-UA')+' грн</div></div>'+
         '<div class="actions" style="margin:0"><button class="btn secondary edit">Редагувати</button><button class="btn danger del">Видалити</button></div>';
       item.querySelector('.edit').onclick=()=>fillForm(p);
@@ -266,6 +274,7 @@
 
     const payload={
       name, category, price,
+      manager_username:$('manager').value,
       image:$('image').value.trim() || null,
       memory:category==='iphone' ? ($('memory').value.trim()||null) : null,
       color:category==='iphone' ? ($('color').value.trim()||null) : null,

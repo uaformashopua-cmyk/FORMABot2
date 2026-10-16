@@ -1,61 +1,373 @@
 <!doctype html>
-<html lang="uk"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#070707"><title>FORMA — Техніка та сервіс</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{--bg:#070707;--panel:#101010;--line:#292929;--muted:#929292;--white:#f5f5f2;--lime:#d5ff65;--font:Manrope,Inter,Arial,sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;background:var(--bg);color:var(--white);font-family:var(--font);overflow-x:hidden}a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{cursor:pointer}.header{height:74px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,4vw,64px);border-bottom:1px solid #ffffff12;background:#070707ed;backdrop-filter:blur(18px)}.logo{font-size:27px;font-weight:800;letter-spacing:4px}.logo span,.about-mark span{color:var(--lime)}.nav{display:flex;gap:clamp(15px,2.7vw,38px)}.navlink{font-size:12px;color:#929292;transition:color .2s}.navlink:hover,.navlink.active{color:white}.header-cta{font-size:12px;border:1px solid #444;padding:11px 15px;border-radius:7px}.header-cta:hover{background:var(--lime);color:#080808}.header-cta span{margin-left:10px}.menu-toggle{display:none;background:transparent;color:#fff;border:1px solid #333;border-radius:7px;padding:9px 11px}.hero{min-height:600px;max-width:1500px;margin:auto;padding:80px clamp(20px,7vw,110px) 65px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:25px;position:relative;overflow:hidden}.hero-glow{position:absolute;width:520px;height:520px;border-radius:50%;right:6%;top:4%;background:radial-gradient(circle,#d5ff6514,transparent 70%)}.hero-content{position:relative;z-index:2}.eyebrow{font-size:10px;letter-spacing:2.4px;font-weight:800;color:#929292}.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 13px #d5ff6588;margin-right:9px}.hero h1{font-size:clamp(49px,7vw,98px);line-height:.98;letter-spacing:-.075em;margin:24px 0}.hero h1 span,.section-head h2 span,.about-copy h2 span{color:#8d8d8d}.hero-content>p{max-width:510px;font-size:14px;line-height:1.9;color:#999}.hero-actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:25px;padding:14px 18px;border-radius:7px;border:1px solid transparent;font-size:11px;font-weight:800;transition:transform .25s,background .25s}.btn:hover{transform:translateY(-3px)}.btn span{font-size:16px}.btn-light{background:var(--lime);color:#080808}.btn-ghost{border-color:#3b3b3b;color:#eee;background:#ffffff03}.hero-proof{margin-top:55px;font-size:10px;letter-spacing:1.3px;color:#737373}.hero-proof span{color:var(--lime);margin-right:12px}.hero-art{height:370px;position:relative;display:flex;align-items:center;justify-content:center}.orbit{position:absolute;border:1px solid #ffffff13;border-radius:50%;transform:rotate(-25deg)}.orbit-one{width:360px;height:290px;animation:orbit 18s linear infinite}.orbit-two{width:290px;height:370px;border-color:#d5ff6522;animation:orbit 24s linear infinite reverse}.art-chip{width:220px;height:250px;border:1px solid #ffffff2b;border-radius:30px;display:grid;place-items:center;font-size:112px;font-weight:800;letter-spacing:-12px;color:#171717;background:linear-gradient(145deg,#242424,#0b0b0b 55%,#1c1c1c);box-shadow:20px 30px 90px #000,inset 1px 1px #ffffff22;transform:rotateY(-13deg) rotateX(5deg);position:relative}.art-chip:before,.art-chip:after{content:"";position:absolute;background:var(--lime)}.art-chip:before{height:4px;width:45px;top:30px;left:28px;border-radius:4px}.art-chip:after{width:5px;height:45px;right:28px;bottom:28px;border-radius:4px}.art-caption{position:absolute;bottom:4px;left:3%;display:flex;flex-direction:column;gap:5px}.art-caption span,.art-pill{font-size:9px;letter-spacing:1.7px;color:#858585}.art-caption b{font-size:17px}.art-pill{position:absolute;border:1px solid #343434;border-radius:6px;padding:12px 14px;background:#0b0b0bd9}.art-pill span{color:var(--lime);margin-left:16px}.pill-top{top:30px;right:0;animation:float 5s ease-in-out infinite}.pill-bottom{bottom:50px;right:3%;animation:float 5s ease-in-out -2s infinite}.ticker{overflow:hidden;border-block:1px solid #ffffff14;background:#0b0b0b}.ticker-track{display:flex;align-items:center;justify-content:space-around;gap:36px;min-width:850px;padding:19px 0;animation:marquee 25s linear infinite}.ticker span{font-size:10px;letter-spacing:2.5px;font-weight:800;white-space:nowrap}.ticker i{font-style:normal;color:var(--lime)}.section{max-width:1300px;margin:auto;padding:95px clamp(20px,5vw,70px)}.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:35px}.section-head h2{font-size:clamp(34px,4.4vw,58px);line-height:1.08;letter-spacing:-.06em;margin:16px 0 0}.section-head>p{max-width:370px;color:#888;font-size:12px;line-height:1.9;margin:0 0 5px}.tabs{display:flex;gap:8px;margin-bottom:22px}.tab{background:transparent;color:#999;border:1px solid #303030;border-radius:6px;padding:10px 15px;font-size:11px}.tab.active,.tab:hover{background:var(--lime);color:#080808;border-color:var(--lime)}.status{color:#888;font-size:12px;padding:20px 0}.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.product-card{border:1px solid #242424;background:#0d0d0d;border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s;animation:cardIn .5s both}.product-card:hover{transform:translateY(-5px);border-color:#5b5b5b}.product-pic{aspect-ratio:1/1;background:radial-gradient(circle at 50% 45%,#222,#0c0c0c 65%);display:grid;place-items:center;overflow:hidden}.product-pic img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.product-card:hover .product-pic img{transform:scale(1.04)}.placeholder{font-size:37px;font-weight:800;letter-spacing:3px;color:#333}.product-info{padding:17px}.product-cat{font-size:9px;letter-spacing:1.7px;color:#888;text-transform:uppercase}.product-name{font-size:17px;font-weight:800;margin-top:7px}.product-spec{font-size:11px;color:#858585;line-height:1.6;margin-top:7px;min-height:18px}.product-price{font-size:17px;font-weight:800;margin-top:14px}.product-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid #ffffff12;font-size:10px;color:#888}.product-foot span:last-child{color:var(--lime)}
-.builder-section{position:relative;background:#0b0b0b;border-block:1px solid #ffffff0d;overflow:hidden}.builder-bg-orb{position:absolute;width:650px;height:650px;border-radius:50%;right:-260px;top:0;background:radial-gradient(circle,#d5ff650b,transparent 70%)}.builder-wrap{position:relative}.builder-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:start}.builder-form,.estimate-card{border:1px solid #2a2a2a;border-radius:13px;background:#0e0e0e;padding:clamp(18px,3vw,30px)}.form-top,.estimate-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.step,.form-tag{font-size:9px;letter-spacing:1.6px;color:#8a8a8a}.form-tag{border:1px solid #353535;border-radius:4px;padding:7px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.builder-form label{display:flex;flex-direction:column;gap:8px;font-size:10px;color:#b5b5b5}.builder-form input,.builder-form textarea{width:100%;background:#080808;color:#f5f5f2;border:1px solid #2c2c2c;border-radius:6px;padding:13px;font-size:12px;outline:none;transition:border .2s,box-shadow .2s}.builder-form input:focus,.builder-form textarea:focus{border-color:#a9cc54;box-shadow:0 0 0 3px #d5ff6510}.builder-form input::placeholder,.builder-form textarea::placeholder{color:#535353}.extra-label{margin-top:17px}.builder-form textarea{resize:vertical}.builder-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.micro-note{font-size:9px;line-height:1.7;color:#6f6f6f;margin:18px 0 0}.estimate-card{background:linear-gradient(145deg,#151713,#0c0c0c 60%);position:sticky;top:95px;overflow:hidden}.estimate-top{margin-bottom:35px}.pulse-ring{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 5px #d5ff6515,0 0 20px #d5ff6570;animation:pulse 2s infinite}.estimate-label{font-size:11px;color:#aaa}.estimate-value{font-size:clamp(38px,4vw,56px);font-weight:800;letter-spacing:-.06em;margin:10px 0;white-space:nowrap}.estimate-value small{font-size:12px;color:#999;letter-spacing:0}.estimate-range{font-size:11px;color:var(--lime);min-height:18px}.build-summary{margin-top:18px;padding:14px;border:1px solid #30352a;border-radius:8px;background:#0a0c08}.build-summary>b{font-size:12px;color:var(--lime)}.build-summary p{font-size:11px;color:#888;line-height:1.7;margin:8px 0 0}.build-summary .build-part{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ffffff10;font-size:11px;line-height:1.5}.build-summary .build-part span{color:#999}.build-summary .build-part b{text-align:right;font-weight:600}.build-summary .build-total{font-size:12px;color:#fff;padding-top:12px;font-weight:800}.estimate-divider{height:1px;background:#ffffff15;margin:22px 0}.estimate-meta{display:flex;justify-content:space-between;font-size:11px;color:#888;margin:13px 0}.estimate-meta b{color:#eee;font-weight:600}.market-links{display:grid;gap:8px;margin-bottom:22px}.market-links a{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;border:1px solid #2c2c2c;border-radius:6px;font-size:10px;color:#ccc;transition:.2s}.market-links a:hover{border-color:var(--lime);color:var(--lime)}.market-links span{font-size:10px;color:#777;line-height:1.7}.btn-full{width:100%;justify-content:space-between}.save-message{font-size:10px;color:var(--lime);margin-top:12px;line-height:1.6}.my-builds{margin-top:45px;padding-top:30px;border-top:1px solid #ffffff16;display:grid;grid-template-columns:250px 1fr;gap:25px}.my-builds h3{font-size:20px;margin:12px 0}.my-builds h3 span{font-size:11px;vertical-align:middle;color:#080808;background:var(--lime);padding:3px 7px;border-radius:4px;margin-left:7px}.saved-builds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.saved-builds>p{font-size:11px;color:#777}.saved-item{border:1px solid #2c2c2c;border-radius:8px;padding:14px;background:#0d0d0d}.saved-item b{display:block;font-size:12px;margin-bottom:7px}.saved-item span{font-size:10px;color:#999;line-height:1.7}.saved-item button{display:block;margin-top:10px;border:0;background:transparent;color:var(--lime);padding:0;font-size:10px}
-.services-section{padding-top:100px;padding-bottom:105px}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.service-card{position:relative;min-height:255px;padding:25px;border:1px solid #272727;border-radius:10px;background:linear-gradient(145deg,#111,#0a0a0a);transition:transform .3s,border-color .3s;overflow:hidden}.service-card:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:-80px;bottom:-80px;background:#d5ff6512;transition:transform .4s}.service-card:hover{transform:translateY(-5px);border-color:#555}.service-card:hover:after{transform:scale(2.2)}.service-number{position:absolute;right:22px;top:24px;font-size:10px;color:#686868}.service-icon{width:42px;height:42px;border-radius:9px;border:1px solid #373737;display:grid;place-items:center;color:var(--lime);font-size:21px;margin-bottom:28px}.service-card h3{font-size:17px;margin:0 0 10px}.service-card p{font-size:11px;color:#888;line-height:1.85;min-height:60px}.service-card>a{display:flex;justify-content:space-between;border-top:1px solid #ffffff13;padding-top:15px;margin-top:20px;font-size:10px;color:#ccc}.service-card>a span{color:var(--lime)}.about-section{border-block:1px solid #ffffff12;background:linear-gradient(110deg,#0c0c0c,#10120c)}.about-layout{display:grid;grid-template-columns:.7fr 1.3fr;gap:70px;align-items:center}.about-mark{font-size:clamp(120px,20vw,260px);line-height:.8;letter-spacing:-.13em;font-weight:800;color:#1b1d18;text-shadow:1px 1px #ffffff10;position:relative}.about-mark:after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:var(--lime);left:35%;top:10%;box-shadow:0 0 40px #d5ff6566}.about-copy h2{font-size:clamp(31px,4vw,52px);line-height:1.12;letter-spacing:-.06em;margin:17px 0}.about-copy p{font-size:12px;line-height:2;color:#999;max-width:650px}.about-copy .btn{margin-top:14px}.footer{min-height:100px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:25px clamp(20px,5vw,70px);font-size:10px;color:#777}.footer .logo{font-size:22px;color:#eee}.footer>a:not(.logo){color:#ddd}.modal{position:fixed;inset:0;z-index:60}.hidden{display:none!important}.modal-bg{position:absolute;inset:0;background:#000c;backdrop-filter:blur(8px)}.sheet{position:absolute;right:0;top:0;height:100%;width:min(560px,100%);background:#0b0b0b;border-left:1px solid #333;padding:28px;overflow:auto;animation:slideIn .3s ease}.close{position:absolute;right:18px;top:14px;background:#222;color:#fff;border:0;border-radius:50%;width:38px;height:38px;font-size:25px}.detail-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;background:#141414;margin:25px 0 20px}.detail h2{font-size:32px;margin:8px 0}.detail-price{font-size:25px;font-weight:800;margin:15px 0}.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fact{background:#151515;border-radius:7px;padding:12px;color:#888;font-size:10px}.fact b{display:block;color:#fff;margin-top:5px;font-size:12px}.buy{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:20px;background:var(--lime);color:#050505;padding:15px;border-radius:7px;font-size:11px;font-weight:800}.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}@keyframes orbit{to{rotate:335deg}}@keyframes float{0%,100%{translate:0 0}50%{translate:0 -9px}}@keyframes marquee{to{transform:translateX(-50%)}}@keyframes pulse{50%{box-shadow:0 0 0 10px #d5ff6500,0 0 24px #d5ff6570}}@keyframes cardIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{transform:translateX(35px);opacity:.5}to{transform:translateX(0);opacity:1}}
-@media(max-width:950px){.hero{padding-top:65px;grid-template-columns:1fr 1fr}.hero-art{scale:.85}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.builder-layout{grid-template-columns:1fr}.estimate-card{position:static}.service-grid{grid-template-columns:repeat(2,1fr)}.about-layout{gap:35px}}@media(max-width:700px){.header{height:65px}.nav{display:none;position:absolute;top:64px;left:0;right:0;background:#0b0b0b;border-bottom:1px solid #333;padding:20px;flex-direction:column;gap:0}.nav.open{display:flex}.navlink{padding:13px 5px;border-bottom:1px solid #ffffff10}.header-cta{margin-left:auto;margin-right:10px;padding:9px 10px}.menu-toggle{display:block}.hero{grid-template-columns:1fr;padding-top:55px}.hero h1{font-size:clamp(54px,13vw,80px)}.hero-art{height:285px;scale:.9}.art-chip{width:190px;height:210px;font-size:90px}.orbit-one{width:300px;height:250px}.orbit-two{height:320px;width:260px}.hero-proof{margin-top:35px}.section{padding-top:65px;padding-bottom:65px}.section-head{display:block}.section-head>p{margin-top:18px}.product-grid{gap:9px}.product-info{padding:12px}.product-name{font-size:14px}.product-price{font-size:14px}.product-spec{font-size:10px}.product-foot{font-size:9px}.field-grid{grid-template-columns:1fr}.my-builds{grid-template-columns:1fr;gap:8px}.saved-builds{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr}.service-card{min-height:auto}.service-card p{min-height:0}.about-layout{grid-template-columns:1fr;gap:25px}.about-mark{font-size:145px}.footer{flex-wrap:wrap}.footer>*{width:45%}.footer>*:nth-child(even){text-align:right}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
-</style></head>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FORMA — Адмін-панель</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#090909;color:#fff;font-family:Inter,Arial,sans-serif}
+    button,input,select,textarea{font:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+    .logo{font-size:30px;font-weight:900;letter-spacing:3px}
+    .muted{color:#999}
+    .card{background:#121212;border:1px solid #292929;border-radius:18px;padding:20px;margin-bottom:18px}
+    .login{max-width:460px;margin:9vh auto}
+    h1,h2,h3{margin:0 0 14px}
+    label{display:block;font-size:13px;color:#aaa;margin:12px 0 7px}
+    input,select,textarea{width:100%;background:#0b0b0b;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:#777}
+    textarea{min-height:90px;resize:vertical}
+    .btn{border:0;border-radius:10px;padding:12px 16px;cursor:pointer;font-weight:800}
+    .primary{background:#fff;color:#000}
+    .secondary{background:#222;color:#fff;border:1px solid #3a3a3a}
+    .danger{background:#5d1717;color:#fff}
+    .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .msg{padding:12px 14px;border-radius:10px;margin:12px 0;display:none;white-space:pre-wrap}
+    .err{background:#321313;border:1px solid #713030;color:#ffb5b5}
+    .ok{background:#12321c;border:1px solid #2f6f40;color:#b7f0c4}
+    .products{display:grid;gap:12px}
+    .product{background:#0d0d0d;border:1px solid #292929;border-radius:14px;padding:15px;display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center}
+    .thumb{width:76px;height:76px;border-radius:10px;object-fit:cover;background:#181818}
+    .pname{font-weight:900;margin-bottom:4px}
+    .price{font-weight:900;margin-top:6px}
+    .badge{display:inline-block;font-size:11px;padding:4px 7px;border-radius:6px;background:#222;color:#ccc;margin-left:6px}
+    .off{opacity:.5}
+    .hidden{display:none!important}
+    .check{display:flex;align-items:center;gap:9px;margin-top:14px;color:#ccc}
+    .check input{width:auto}
+    .loading{position:fixed;inset:0;background:#090909;display:flex;align-items:center;justify-content:center;z-index:99}
+    .loadingBox{text-align:center;color:#bbb}
+    .spinner{width:28px;height:28px;border:3px solid #333;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:700px){.wrap{padding:14px}.row,.row3{grid-template-columns:1fr}.product{grid-template-columns:56px 1fr}.product .actions{grid-column:1/-1}.thumb{width:56px;height:56px}.top{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
 <body>
-<header class="header"><a class="logo" href="#home">FORMA<span>.</span></a><nav class="nav" id="nav"><a class="navlink active" href="#home">Магазин</a><a class="navlink" href="#builder">Скласти ПК</a><a class="navlink" href="#services">Послуги</a><a class="navlink" href="#about">Про нас</a></nav><a class="header-cta" href="https://t.me/Sundayass" target="_blank" rel="noopener">Менеджер iPhone <span>↗</span></a><a class="header-cta" href="https://t.me/yurvnnn" target="_blank" rel="noopener">Менеджер ПК <span>↗</span></a><button class="menu-toggle" id="menuToggle" aria-label="Відкрити меню">☰</button></header>
-<main>
-<section class="hero" id="home"><div class="hero-glow"></div><div class="hero-content reveal"><div class="eyebrow"><span class="live-dot"></span> ТЕХНІКА · ЗБІРКИ · СЕРВІС</div><h1>Технології,<br><span>зібрані під тебе.</span></h1><p>Перевірені iPhone, ігрові ПК та сервіс, якому можна довіряти. Обирай готове або спроєктуй власну збірку.</p><div class="hero-actions"><a class="btn btn-light" href="#shop">Обрати техніку <span>↘</span></a><a class="btn btn-ghost" href="#builder">Скласти свій ПК <span>＋</span></a></div><div class="hero-proof"><span>01 /</span> FORMA SHOP — твоя техніка, твій вибір</div></div><div class="hero-art reveal"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-chip">F.</div><div class="art-caption"><span>FORMA SYSTEM</span><b>Built for you.</b></div><div class="art-pill pill-top">PERFORMANCE <span>↗</span></div><div class="art-pill pill-bottom">SMART CHOICE <span>✳</span></div></div></section>
-<section class="ticker"><div class="ticker-track"><span>IPHONE B/В</span><i>✳</i><span>PC BUILDS</span><i>✳</i><span>PC CLEANING</span><i>✳</i><span>UPGRADES</span><i>✳</i><span>IPHONE B/В</span><i>✳</i><span>PC BUILDS</span><i>✳</i><span>PC CLEANING</span><i>✳</i><span>UPGRADES</span><i>✳</i></div></section>
-<section class="section" id="shop"><div class="section-head reveal"><div><div class="eyebrow">01 — КАТАЛОГ</div><h2>Знайди свій <span>девайс.</span></h2></div><p>Товари, доступні зараз. Каталог автоматично підтягується з бази FORMA.</p></div><div class="tabs" id="shopTabs"><button class="tab active" data-cat="all">Усе</button><button class="tab" data-cat="iphone">iPhone</button><button class="tab" data-cat="pc">Готові ПК</button></div><div id="status" class="status">Завантажуємо каталог…</div><div id="products" class="product-grid"></div></section>
-<section class="builder-section" id="builder"><div class="builder-bg-orb"></div><div class="section builder-wrap"><div class="section-head reveal"><div><div class="eyebrow">02 — PC CONFIGURATOR</div><h2>Склади ПК.<br><span>Дізнайся ціну.</span></h2></div><p>Вкажи комплектуючі. FORMA порахує приблизний бюджет і відкриє пошук пропозицій на популярних майданчиках.</p></div><div class="builder-layout"><form class="builder-form reveal" id="builderForm"><div class="form-top"><span class="step">YOUR BUILD / 01</span><span class="form-tag">PC CONFIGURATOR</span></div><div class="field-grid"><label>Процесор (CPU)<input id="cpuInput" placeholder="Напр. Ryzen 5 5600"></label><label>Відеокарта (GPU)<input id="gpuInput" placeholder="Напр. RTX 3060 12GB"></label><label>Оперативна пам'ять<input id="ramInput" placeholder="Напр. DDR4 32GB"></label><label>Материнська плата<input id="boardInput" placeholder="Напр. B550"></label><label>Накопичувач<input id="storageInput" placeholder="Напр. SSD NVMe 1TB"></label><label>Блок живлення<input id="psuInput" placeholder="Напр. 650W 80+ Bronze"></label><label>Корпус<input id="caseInput" placeholder="Напр. ATX mesh"></label><label>Охолодження<input id="coolerInput" placeholder="Напр. башта 120 мм"></label></div><label class="extra-label">Додаткові побажання<textarea id="notesInput" rows="3" placeholder="Ігри, монтаж, бюджет, стан комплектуючих…"></textarea></label><div class="builder-actions"><button class="btn btn-light" type="submit">Оцінити збірку <span>↗</span></button><button class="btn btn-ghost" type="button" id="resetBuilder">Очистити</button></div><p class="micro-note">Оцінка приблизна, орієнтована переважно на вживані комплектуючі. Сайт не сканує оголошення наживо — перевір актуальні пропозиції перед покупкою.</p></form><aside class="estimate-card reveal"><div class="estimate-top"><span class="eyebrow">ESTIMATED VALUE</span><span class="pulse-ring"></span></div><div class="estimate-label">Орієнтовна ціна комплектуючих</div><div class="estimate-value" id="estimateValue">— <small>грн</small></div><div class="estimate-range" id="estimateRange">Заповни хоча б CPU або GPU</div><div class="build-summary" id="buildSummary"><b>Деталі твоєї збірки</b><p>Після оцінки тут з’являться всі вибрані комплектуючі та їхні орієнтовні ціни.</p></div><div class="estimate-divider"></div><div class="estimate-meta"><span>Комплектуючих</span><b id="partCount">0</b></div><div class="estimate-meta"><span>Надійність оцінки</span><b id="confidence">Очікує дані</b></div><div class="estimate-divider"></div><div id="marketLinks" class="market-links"><span>Після розрахунку тут з'являться посилання для перевірки цін.</span></div><button class="btn btn-light btn-full" type="button" id="sendBuild">Надіслати збірку менеджеру ПК <span>↗</span></button><div id="saveBuildMessage" class="save-message" aria-live="polite"></div></aside></div><div class="my-builds reveal"><div><div class="eyebrow">SAVED LOCALLY</div><h3>Мої конфігурації <span id="savedCount">0</span></h3></div><div id="savedBuilds" class="saved-builds"><p>Тут з'являться збірки, які ти збережеш на цьому пристрої.</p></div></div></div></section>
-<section class="section services-section" id="services"><div class="section-head reveal"><div><div class="eyebrow">03 — ЩО МИ РОБИМО</div><h2>Не лише продаємо.<br><span>Допомагаємо працювати.</span></h2></div><p>Підберемо техніку, приведемо до ладу твій ПК і допоможемо витиснути більше з наявного заліза.</p></div><div class="service-grid">
-<article class="service-card reveal"><div class="service-number">01</div><div class="service-icon">◉</div><h3>Продаж iPhone B/В</h3><p>Вживані iPhone, інформація про стан і батарею, допомога з вибором моделі.</p><a href="https://t.me/Sundayass" target="_blank" rel="noopener">Запитати про iPhone <span>↗</span></a></article>
-<article class="service-card reveal"><div class="service-number">02</div><div class="service-icon">▦</div><h3>Продаж та збірка ПК</h3><p>Готові конфігурації або індивідуальний ПК під ігри, навчання, роботу чи монтаж.</p><a href="#builder">Скласти конфігурацію <span>↗</span></a></article>
-<article class="service-card reveal"><div class="service-number">03</div><div class="service-icon">✳</div><h3>Чистка ПК</h3><p>Очищення від пилу, перевірка температур, догляд за системою охолодження.</p><a href="https://t.me/yurvnnn" target="_blank" rel="noopener">Записатися <span>↗</span></a></article>
-<article class="service-card reveal"><div class="service-number">04</div><div class="service-icon">⌘</div><h3>Обслуговування ПК</h3><p>Діагностика, профілактика, перевірка стабільності та пошук причин перегріву.</p><a href="https://t.me/yurvnnn" target="_blank" rel="noopener">Обговорити проблему <span>↗</span></a></article>
-<article class="service-card reveal"><div class="service-number">05</div><div class="service-icon">↗</div><h3>Апгрейд комплектуючих</h3><p>Підбір сумісних RAM, SSD, відеокарти та блока живлення під твій бюджет.</p><a href="https://t.me/yurvnnn" target="_blank" rel="noopener">Підібрати апгрейд <span>↗</span></a></article>
-<article class="service-card reveal"><div class="service-number">06</div><div class="service-icon">◎</div><h3>Консультація та підбір</h3><p>Допоможемо зрозуміти, що варто купити, а за що не потрібно переплачувати.</p><a href="https://t.me/yurvnnn" target="_blank" rel="noopener">Поговорити з менеджером ПК <span>↗</span></a></article>
-</div></section>
-<section class="about-section" id="about"><div class="section about-layout"><div class="about-mark reveal">F<span>.</span></div><div class="about-copy reveal"><div class="eyebrow">04 — ПРО FORMA</div><h2>Техніка — це інструмент.<br><span>Правильний вибір змінює досвід.</span></h2><p>FORMA — магазин техніки та сервіс для тих, хто хоче отримати максимум від свого бюджету. Допомагаємо вибрати iPhone, підібрати або зібрати ПК, оновити комплектуючі й подбати про техніку.</p><p>Розкажи, що тобі потрібно, — разом знайдемо оптимальне рішення.</p><a class="btn btn-light" href="https://t.me/Sundayass" target="_blank" rel="noopener">Написати FORMA <span>↗</span></a></div></div></section>
-</main><footer class="footer"><a class="logo" href="#home">FORMA<span>.</span></a><span>Техніка · Збірки · Сервіс</span><a href="https://t.me/StoreFORMA_bot?startapp">Відкрити в Telegram ↗</a><span>© FORMA 2026</span></footer>
-<div id="detail" class="modal hidden"><div class="modal-bg" id="closeBg"></div><div class="sheet"><button class="close" id="closeDetail" aria-label="Закрити">×</button><div id="detailContent"></div></div></div>
+<div id="loading" class="loading">
+  <div class="loadingBox"><div class="spinner"></div><div>FORMA — запуск адмін-панелі…</div><div id="loadStatus" class="muted" style="margin-top:8px;font-size:12px"></div></div>
+</div>
+
+<div id="app" class="wrap hidden">
+  <div class="top">
+    <div>
+      <div class="logo">FORMA</div>
+      <div class="muted">Адмін-панель магазину</div>
+    </div>
+    <button id="logoutBtn" class="btn secondary hidden">Вийти</button>
+  </div>
+
+  <div id="globalMsg" class="msg"></div>
+
+  <section id="loginCard" class="card login">
+    <h2>Вхід адміністратора</h2>
+    <div class="muted">Увійдіть через email і пароль Supabase.</div>
+    <label>Email</label>
+    <input id="email" type="email" autocomplete="username" placeholder="Ваш email">
+    <label>Пароль</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="Ваш пароль">
+    <div class="actions"><button id="loginBtn" class="btn primary">Увійти</button></div>
+    <div id="loginMsg" class="msg"></div>
+  </section>
+
+  <section id="adminArea" class="hidden">
+    <div class="card">
+      <h2 id="formTitle">Додати товар</h2>
+      <input id="productId" type="hidden">
+      <div class="row">
+        <div><label>Назва</label><input id="name" placeholder="iPhone 15 / FORMA PRO"></div>
+        <div><label>Категорія</label>
+          <select id="category"><option value="iphone">iPhone</option><option value="pc">PC</option></select>
+        </div>
+        <div><label>Менеджер для цього оголошення</label>
+          <select id="manager">
+            <option value="Sundayass">Менеджер телефонів — @Sundayass</option>
+            <option value="yurvnnn">Менеджер ПК — @yurvnnn</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div><label>Ціна, грн</label><input id="price" type="number" min="0" placeholder="23999"></div>
+        <div><label>Посилання на фото</label><input id="image" placeholder="https://..."></div>
+      </div>
+
+      <div id="iphoneFields">
+        <div class="row3">
+          <div><label>Пам'ять</label><input id="memory" placeholder="128 GB"></div>
+          <div><label>Колір</label><input id="color" placeholder="Black"></div>
+          <div><label>Стан</label><input id="condition" placeholder="Новий / B/В"></div>
+        </div>
+        <div class="row">
+          <div><label>АКБ</label><input id="battery" placeholder="100%"></div>
+          <div><label>Гарантія</label><input id="warranty" placeholder="12 months"></div>
+        </div>
+      </div>
+
+      <div id="pcFields" class="hidden">
+        <div class="row3">
+          <div><label>CPU</label><input id="cpu" placeholder="Ryzen 7"></div>
+          <div><label>GPU</label><input id="gpu" placeholder="RTX 4070"></div>
+          <div><label>RAM</label><input id="ram" placeholder="32 GB"></div>
+        </div>
+        <div class="row">
+          <div><label>Накопичувач</label><input id="storage" placeholder="1 TB"></div>
+          <div><label>Гарантія</label><input id="pcWarranty" placeholder="12 months"></div>
+        </div>
+      </div>
+
+      <label class="check"><input id="available" type="checkbox" checked> Товар доступний</label>
+      <div class="actions">
+        <button id="saveBtn" class="btn primary">Зберегти товар</button>
+        <button id="cancelBtn" class="btn secondary hidden">Скасувати редагування</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="top" style="margin-bottom:12px">
+        <div><h2>Товари</h2><div id="count" class="muted"></div></div>
+        <button id="refreshBtn" class="btn secondary">Оновити</button>
+      </div>
+      <div id="products" class="products"></div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(()=>{'use strict';
-const URL='https://qdcnzraotcfdupmnapqo.supabase.co',KEY='sb_publishable_UGo_9Ma67h0WPZdbuBU_cw_FGHgUEHH';
-const supabase=window.supabase.createClient(URL,KEY),tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand()}
-const $=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])),money=v=>Math.round(Number(v)||0).toLocaleString('uk-UA')+' грн';
-let products=[],category='all',currentBuild=null;
-const ids=['cpuInput','gpuInput','ramInput','boardInput','storageInput','psuInput','caseInput','coolerInput'],labels=['CPU','GPU','RAM','Материнська плата','Накопичувач','Блок живлення','Корпус','Охолодження'];
-function specs(p){return p.category==='pc'?[p.cpu,p.gpu,p.ram,p.storage].filter(Boolean).join(' · '):[p.memory,p.color,p.condition,p.battery].filter(Boolean).join(' · ')}
-function renderProducts(){const list=category==='all'?products:products.filter(p=>p.category===category);$('products').innerHTML=list.length?list.map((p,i)=>`<article class="product-card" style="animation-delay:${Math.min(i,8)*45}ms" data-id="${esc(p.id)}"><div class="product-pic">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:'<div class="placeholder">FORMA</div>'}</div><div class="product-info"><div class="product-cat">${p.category==='pc'?'PC BUILDS':'IPHONE'}</div><div class="product-name">${esc(p.name)}</div><div class="product-spec">${esc(specs(p))}</div><div class="product-price">${money(p.price)}</div><div class="product-foot"><span>Є в наявності</span><span>Детальніше ↗</span></div></div></article>`).join(''):'<div class="status">У цій категорії поки немає товарів.</div>';document.querySelectorAll('.product-card').forEach(el=>el.onclick=()=>detail(products.find(p=>String(p.id)===el.dataset.id)))}
-function detail(p){if(!p)return;const image=p.image?`<img class="detail-img" src="${esc(p.image)}" alt="${esc(p.name)}">`:'<div class="detail-img" style="display:grid;place-items:center"><div class="placeholder">FORMA</div></div>';const fields=p.category==='pc'?[['CPU',p.cpu],['GPU',p.gpu],['RAM',p.ram],['Накопичувач',p.storage],['Гарантія',p.warranty]]:[['Памʼять',p.memory],['Колір',p.color],['Стан',p.condition],['АКБ',p.battery],['Гарантія',p.warranty]];const facts=fields.filter(x=>x[1]).map(x=>`<div class="fact">${esc(x[0])}<b>${esc(x[1])}</b></div>`).join('');$('detailContent').innerHTML=`<div class="detail">${image}<div class="product-cat">${p.category==='pc'?'PC BUILDS':'IPHONE'}</div><h2>${esc(p.name)}</h2><div class="detail-price">${money(p.price)}</div><div class="facts">${facts}</div><a class="buy" href="https://t.me/Sundayass?text=${encodeURIComponent('Вітаю! Хочу придбати '+p.name+' за '+money(p.price)+'.')}" target="_blank" rel="noopener">ХОЧУ ПРИДБАТИ <span>↗</span></a></div>`;$('detail').classList.remove('hidden')}
-$('closeDetail').onclick=()=>$('detail').classList.add('hidden');$('closeBg').onclick=()=>$('detail').classList.add('hidden');
-document.querySelectorAll('#shopTabs .tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('#shopTabs .tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');category=b.dataset.cat;renderProducts()});
-async function load(){try{const {data,error}=await supabase.from('products').select('*').eq('available',true).order('id',{ascending:false});if(error){$('status').textContent='Каталог тимчасово недоступний. Онови сторінку або напиши менеджеру.';return}products=data||[];$('status').textContent=products.length?'':'Товарів поки немає — скоро додамо новинки.';renderProducts()}catch(e){$('status').textContent='Не вдалося підключитися до каталогу. Перевір інтернет.'}}load();
-const rules=[
-[/ryzen\s*9\s*7950x/i,14500],[/ryzen\s*9\s*5900x/i,6500],[/ryzen\s*9/i,8500],[/ryzen\s*7\s*7800x3d/i,13500],[/ryzen\s*7\s*5800x3d/i,7500],[/ryzen\s*7\s*5700x/i,4200],[/ryzen\s*7/i,5000],[/ryzen\s*5\s*5600x/i,5000],[/ryzen\s*5\s*5600(?![a-z])/i,4500],[/ryzen\s*5\s*3600/i,2500],[/ryzen\s*5/i,3500],[/i7/i,4500],[/i5/i,2500],[/i3/i,1500],
-[/rtx\s*4090/i,70000],[/rtx\s*4080/i,38000],[/rtx\s*4070\s*ti/i,26000],[/rtx\s*4070/i,21000],[/rtx\s*4060\s*ti/i,16000],[/rtx\s*4060/i,13000],[/rtx\s*3090/i,23000],[/rtx\s*3080/i,17000],[/rtx\s*3070/i,12000],[/rtx\s*3060\s*ti/i,10000],[/rtx\s*3060/i,8500],[/rtx\s*3050/i,6500],[/gtx\s*1660/i,4500],[/gtx\s*1650/i,3500],[/rx\s*7900\s*xtx/i,36000],[/rx\s*7800\s*xt/i,22000],[/rx\s*6700\s*xt/i,12000],[/rx\s*6600/i,8000],
-[/64\s*gb/i,4000],[/32\s*gb/i,2000],[/16\s*gb/i,900],[/8\s*gb/i,500],[/b650/i,5500],[/x670/i,8500],[/b550/i,2500],[/b450/i,1800],[/z790/i,8500],[/b760/i,4000],[/b660/i,3000],[/2\s*tb/i,3000],[/1\s*tb/i,1600],[/512\s*gb/i,900],[/256\s*gb/i,500],[/850\s*w/i,2500],[/750\s*w/i,1800],[/650\s*w/i,1300],[/550\s*w/i,900],[/корпус|case|atx mesh/i,1200],[/охолод|кулер|cooler|баш/i,700]];
-function partPrice(label,value){if(!value.trim())return 0;for(const [re,price] of rules)if(re.test(value))return price;return {'CPU':4000,'GPU':7000,'RAM':1200,'Материнська плата':2200,'Накопичувач':1000,'Блок живлення':1400,'Корпус':1300,'Охолодження':700}[label]||700}
-function getParts(){return ids.map((id,i)=>({label:labels[i],value:$(id).value.trim(),price:partPrice(labels[i],$(id).value)})).filter(p=>p.value)}
-function marketUrl(site,q){const s=encodeURIComponent(q);return site==='OLX'?'https://www.olx.ua/uk/list/q-'+s+'/':site==='Prom'?'https://prom.ua/ua/search?search_term='+s:'https://rozetka.com.ua/ua/search/?text='+s}
-function estimate(){const parts=getParts();if(!parts.length){$('saveBuildMessage').textContent='Заповни хоча б одне поле комплектуючої.';return null}const total=parts.reduce((a,p)=>a+p.price,0),min=Math.round(total*.82/100)*100,max=Math.round(total*1.2/100)*100,hasCpu=parts.some(p=>p.label==='CPU'),hasGpu=parts.some(p=>p.label==='GPU');currentBuild={id:Date.now(),parts,total,min,max,notes:$('notesInput').value.trim()};$('estimateValue').innerHTML=`<span id="animatedPrice">${total.toLocaleString('uk-UA')}</span> <small>грн</small>`;$('estimateRange').textContent=`Орієнтир: ${money(min)} – ${money(max)}`;$('partCount').textContent=parts.length;$('buildSummary').innerHTML='<b>Деталі твоєї збірки</b>'+parts.map(p=>`<div class="build-part"><span>${esc(p.label)}</span><b>${esc(p.value)}<br><span>${money(p.price)} орієнтовно</span></b></div>`).join('')+`<div class="build-total">Орієнтовна вартість: ${money(total)}<br><span style="font-weight:400;color:#aaa">Діапазон: ${money(min)} – ${money(max)}</span></div>`;$('confidence').textContent=parts.length>=6&&hasCpu&&hasGpu?'Середня':hasCpu&&hasGpu?'Попередня':'Низька';const query=parts.map(p=>p.value).join(' ');$('marketLinks').innerHTML=['OLX','Prom','Rozetka'].map(s=>`<a href="${marketUrl(s,query)}" target="_blank" rel="noopener">Перевірити на ${s}<span>↗</span></a>`).join('');$('saveBuildMessage').textContent='Оцінка приблизна й орієнтована переважно на вживані комплектуючі. Це не live-аналіз оголошень — перевір ціни за посиланнями.';const el=$('animatedPrice');if(el)el.animate([{opacity:.2,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:550,easing:'ease-out'});return currentBuild}
-$('builderForm').onsubmit=e=>{e.preventDefault();estimate()};
-$('resetBuilder').onclick=()=>{$('builderForm').reset();currentBuild=null;$('estimateValue').innerHTML='— <small>грн</small>';$('estimateRange').textContent='Заповни хоча б CPU або GPU';$('partCount').textContent='0';$('confidence').textContent='Очікує дані';$('buildSummary').innerHTML='<b>Деталі твоєї збірки</b><p>Після оцінки тут з’являться всі вибрані комплектуючі та їхні орієнтовні ціни.</p>';$('marketLinks').innerHTML='<span>Після розрахунку тут з\\u2019являться посилання для перевірки цін.</span>';$('saveBuildMessage').textContent=''};
-const storageKey='forma_saved_builds_v1';function saved(){try{return JSON.parse(localStorage.getItem(storageKey)||'[]')}catch(e){return []}}function drawSaved(){const list=saved();$('savedCount').textContent=list.length;if(!list.length){$('savedBuilds').innerHTML='<p>Тут з\\u2019являться збірки, які ти збережеш на цьому пристрої.</p>';return}$('savedBuilds').innerHTML=list.map(b=>`<div class="saved-item"><b>${esc(b.parts.slice(0,2).map(p=>p.value).join(' + '))}</b><span>${b.parts.length} компонентів · ${money(b.total)}<br>${esc(b.parts.map(p=>p.label+': '+p.value).join(' · '))}</span><button type="button" data-remove="${b.id}">Видалити ×</button></div>`).join('');document.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>{localStorage.setItem(storageKey,JSON.stringify(saved().filter(b=>String(b.id)!==btn.dataset.remove)));drawSaved()})}
-$('sendBuild').onclick=()=>{const b=currentBuild||estimate();if(!b)return;const message=['Вітаю! Хочу уточнити свою конфігурацію ПК:','',...b.parts.map(p=>`${p.label}: ${p.value}\nОрієнтовна ціна цієї комплектуючої: ${money(p.price)}`),'',`ПРИБЛИЗНА ЗАГАЛЬНА ВАРТІСТЬ ЗБІРКИ: ${money(b.min)} – ${money(b.max)}`,b.notes?`Побажання: ${b.notes}`:'','Будь ласка, перевірте актуальні ціни та сумісність комплектуючих.'].filter(Boolean).join('\n');const list=saved();list.unshift(b);localStorage.setItem(storageKey,JSON.stringify(list.slice(0,10)));drawSaved();window.open('https://t.me/yurvnnn?text='+encodeURIComponent(message),'_blank')};
-$('menuToggle').onclick=()=>$('nav').classList.toggle('open');document.querySelectorAll('.navlink').forEach(a=>a.onclick=()=>{$('nav').classList.remove('open');document.querySelectorAll('.navlink').forEach(n=>n.classList.remove('active'));a.classList.add('active')});
-if('IntersectionObserver'in window){const revealObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));const secObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('.navlink').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-30% 0px -60% 0px'});['home','builder','services','about'].forEach(id=>secObs.observe($(id)))}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
-drawSaved();
+(function(){
+  const SUPABASE_URL = 'https://qdcnzraotcfdupmnapqo.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_UGo_9Ma67h0WPZdbuBU_cw_FGHgUEHH';
+
+  const loading = document.getElementById('loading');
+  const loadStatus = document.getElementById('loadStatus');
+  const app = document.getElementById('app');
+
+  function bootFail(message){
+    loading.innerHTML =
+      '<div class="loadingBox" style="max-width:560px;padding:20px">' +
+      '<div style="font-size:22px;font-weight:900;margin-bottom:10px">FORMA</div>' +
+      '<div style="color:#ffb5b5;white-space:pre-wrap">' + escapeHtml(message) + '</div>' +
+      '<div style="margin-top:16px;color:#999;font-size:13px">Оновіть сторінку після виправлення. Цей екран більше не зависатиме без пояснення.</div>' +
+      '</div>';
+  }
+  function escapeHtml(s){
+    return String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  }
+
+  if(!window.supabase){
+    bootFail('Не завантажився Supabase JS. Перевірте інтернет і відкрийте admin.html ще раз.');
+    return;
+  }
+
+  let client;
+  try{
+    client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }catch(e){
+    bootFail('Помилка запуску Supabase: ' + (e.message || e));
+    return;
+  }
+
+  const $ = id => document.getElementById(id);
+  function msg(el,text,type='err'){
+    el.textContent = text;
+    el.className = 'msg ' + type;
+    el.style.display = 'block';
+  }
+  function hide(el){el.style.display='none'}
+
+  function setLoading(text){
+    loadStatus.textContent = text || '';
+  }
+
+  function clearForm(){
+    $('productId').value='';
+    $('formTitle').textContent='Додати товар';
+    ['name','price','image','memory','color','condition','battery','warranty','cpu','gpu','ram','storage','pcWarranty'].forEach(id=>$(id).value='');
+    $('category').value='iphone';
+    $('manager').value='Sundayass';
+    $('available').checked=true;
+    $('cancelBtn').classList.add('hidden');
+    toggleFields();
+  }
+
+  function fillForm(p){
+    $('productId').value=p.id;
+    $('formTitle').textContent='Редагувати товар';
+    $('name').value=p.name || '';
+    $('category').value=p.category || 'iphone';
+    $('manager').value=p.manager_username || (p.category==='pc' ? 'yurvnnn' : 'Sundayass');
+    $('price').value=p.price ?? 0;
+    $('image').value=p.image || '';
+    $('memory').value=p.memory || '';
+    $('color').value=p.color || '';
+    $('condition').value=p.condition || '';
+    $('battery').value=p.battery || '';
+    $('warranty').value=p.warranty || '';
+    $('cpu').value=p.cpu || '';
+    $('gpu').value=p.gpu || '';
+    $('ram').value=p.ram || '';
+    $('storage').value=p.storage || '';
+    $('pcWarranty').value=p.warranty || '';
+    $('available').checked=!!p.available;
+    $('cancelBtn').classList.remove('hidden');
+    toggleFields();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function toggleFields(){
+    const pc=$('category').value==='pc';
+    $('iphoneFields').classList.toggle('hidden',pc);
+    $('pcFields').classList.toggle('hidden',!pc);
+  }
+
+  async function loadProducts(){
+    const box=$('products');
+    box.innerHTML='<div class="muted">Завантаження товарів…</div>';
+    const {data,error}=await client.from('products').select('*').order('id',{ascending:false});
+    if(error){
+      box.innerHTML='';
+      msg($('globalMsg'),'Не вдалося завантажити товари: '+error.message);
+      return;
+    }
+    hide($('globalMsg'));
+    $('count').textContent='Усього: '+(data?.length||0);
+    if(!data?.length){
+      box.innerHTML='<div class="muted">Товарів ще немає. Додайте перший вище.</div>';
+      return;
+    }
+    box.innerHTML='';
+    data.forEach(p=>{
+      const item=document.createElement('div');
+      item.className='product '+(!p.available?'off':'');
+      const img=p.image ? `<img class="thumb" src="${escapeHtml(p.image)}" onerror="this.style.visibility='hidden'">` : '<div class="thumb"></div>';
+      item.innerHTML=img+
+        '<div><div class="pname">'+escapeHtml(p.name||'Без назви')+
+        (!p.available?'<span class="badge">Немає</span>':'')+
+        '</div><div class="muted">'+escapeHtml(p.category==='pc'?'PC':'iPhone')+' · менеджер @'+escapeHtml(p.manager_username || (p.category==='pc'?'yurvnnn':'Sundayass'))+'</div>'+
+        '<div class="price">'+Number(p.price||0).toLocaleString('uk-UA')+' грн</div></div>'+
+        '<div class="actions" style="margin:0"><button class="btn secondary edit">Редагувати</button><button class="btn danger del">Видалити</button></div>';
+      item.querySelector('.edit').onclick=()=>fillForm(p);
+      item.querySelector('.del').onclick=()=>deleteProduct(p);
+      box.appendChild(item);
+    });
+  }
+
+  async function deleteProduct(p){
+    if(!confirm('Видалити товар «'+p.name+'»?')) return;
+    const {error}=await client.from('products').delete().eq('id',p.id);
+    if(error){msg($('globalMsg'),'Помилка видалення: '+error.message);return;}
+    msg($('globalMsg'),'Товар видалено.','ok');
+    await loadProducts();
+  }
+
+  async function saveProduct(){
+    hide($('globalMsg'));
+    const id=$('productId').value;
+    const category=$('category').value;
+    const name=$('name').value.trim();
+    const price=Number($('price').value||0);
+    if(!name){msg($('globalMsg'),'Вкажіть назву товару.');return;}
+    if(price<0){msg($('globalMsg'),'Ціна не може бути від’ємною.');return;}
+
+    const payload={
+      name, category, price,
+      manager_username:$('manager').value,
+      image:$('image').value.trim() || null,
+      memory:category==='iphone' ? ($('memory').value.trim()||null) : null,
+      color:category==='iphone' ? ($('color').value.trim()||null) : null,
+      condition:category==='iphone' ? ($('condition').value.trim()||null) : null,
+      battery:category==='iphone' ? ($('battery').value.trim()||null) : null,
+      warranty:category==='iphone' ? ($('warranty').value.trim()||null) : ($('pcWarranty').value.trim()||null),
+      cpu:category==='pc' ? ($('cpu').value.trim()||null) : null,
+      gpu:category==='pc' ? ($('gpu').value.trim()||null) : null,
+      ram:category==='pc' ? ($('ram').value.trim()||null) : null,
+      storage:category==='pc' ? ($('storage').value.trim()||null) : null,
+      available:$('available').checked
+    };
+
+    $('saveBtn').disabled=true;
+    $('saveBtn').textContent='Зберігаю…';
+    let result;
+    if(id) result=await client.from('products').update(payload).eq('id',id);
+    else result=await client.from('products').insert(payload);
+    $('saveBtn').disabled=false;
+    $('saveBtn').textContent='Зберегти товар';
+
+    if(result.error){
+      msg($('globalMsg'),'Не вдалося зберегти товар:\n'+result.error.message);
+      return;
+    }
+    msg($('globalMsg'),id?'Товар оновлено.':'Товар додано.','ok');
+    clearForm();
+    await loadProducts();
+  }
+
+  async function checkAdmin(user){
+    const {data,error}=await client.from('admin_users').select('user_id').eq('user_id',user.id).maybeSingle();
+    if(error) throw new Error('Не вдалося перевірити admin_users: '+error.message);
+    if(!data) throw new Error('Цей акаунт не має прав адміністратора. Додайте його user_id у public.admin_users.');
+  }
+
+  async function showLoggedIn(user){
+    await checkAdmin(user);
+    $('loginCard').classList.add('hidden');
+    $('adminArea').classList.remove('hidden');
+    $('logoutBtn').classList.remove('hidden');
+    await loadProducts();
+  }
+
+  async function boot(){
+    try{
+      setLoading('Перевіряю сесію…');
+      const {data,error}=await client.auth.getSession();
+      if(error) throw error;
+      loading.classList.add('hidden');
+      app.classList.remove('hidden');
+      if(data.session){
+        try{ await showLoggedIn(data.session.user); }
+        catch(e){ msg($('loginMsg'),e.message||String(e)); }
+      }
+    }catch(e){
+      bootFail('Помилка запуску: '+(e.message||e));
+    }
+  }
+
+  $('loginBtn').onclick=async()=>{
+    hide($('loginMsg'));
+    const email=$('email').value.trim(), password=$('password').value;
+    if(!email||!password){msg($('loginMsg'),'Введіть email і пароль.');return;}
+    $('loginBtn').disabled=true;
+    $('loginBtn').textContent='Вхід…';
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    $('loginBtn').disabled=false;
+    $('loginBtn').textContent='Увійти';
+    if(error){msg($('loginMsg'),error.message);return;}
+    try{await showLoggedIn(data.user);}
+    catch(e){await client.auth.signOut();msg($('loginMsg'),e.message||String(e));}
+  };
+
+  $('logoutBtn').onclick=async()=>{
+    await client.auth.signOut();
+    location.reload();
+  };
+  $('saveBtn').onclick=saveProduct;
+  $('cancelBtn').onclick=clearForm;
+  $('refreshBtn').onclick=loadProducts;
+  $('category').onchange=toggleFields;
+  $('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+
+  // Не дозволяємо екрану «Завантаження…» висіти вічно.
+  setTimeout(()=>{
+    if(!loading.classList.contains('hidden')){
+      bootFail('Сторінка не отримала відповідь вчасно. Найчастіше це означає блокування CDN/Supabase або помилку мережі.');
+    }
+  },12000);
+
+  boot();
 })();
-</script></body></html>
+</script>
+</body>
+</html>
